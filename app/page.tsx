@@ -1,7 +1,7 @@
 "use client"
 
 import { BottomNavigation } from "@/components/bottom-navigation"
-import { Eye, Crown, ArrowRight, Users } from "lucide-react"
+import { Eye, Crown, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function HomePage() {
@@ -20,6 +20,10 @@ export default function HomePage() {
             <Eye className="w-5 h-5 text-slate-400" />
           </div>
           <div className="text-4xl font-light">$2847.33</div>
+          <div className="flex gap-3 mt-4">
+            <Button className="flex-1 bg-slate-700 hover:bg-slate-600 text-white border-0">Pay</Button>
+            <Button className="flex-1 bg-slate-700 hover:bg-slate-600 text-white border-0">Request</Button>
+          </div>
         </div>
 
         {/* FlowPoints Card */}
@@ -47,11 +51,6 @@ export default function HomePage() {
               ></div>
             </div>
           </div>
-
-          <Button className="w-full bg-slate-700 hover:bg-slate-600 text-white border-0">
-            Redeem Rewards
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
         </div>
 
         {/* Recent Activity */}
