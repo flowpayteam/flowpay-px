@@ -4,6 +4,7 @@ import { BottomNavigation } from "@/components/bottom-navigation"
 import { Plus, ChevronRight, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useState } from "react"
 
 export default function GroupsPage() {
   const groups = [
@@ -62,6 +63,40 @@ export default function GroupsPage() {
     },
   ]
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [newGroup, setNewGroup] = useState({
+    name: "",
+    target: "",
+    description: "",
+    emoji: "🎯",
+    timeLimit: "",
+  })
+
+  const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false)
+  const [joinGroupCode, setJoinGroupCode] = useState("")
+
+  const handleCreateGroup = () => {
+    // Here you would typically send the data to your backend
+    console.log("Creating group:", newGroup)
+    // Reset form and close dialog
+    setNewGroup({
+      name: "",
+      target: "",
+      description: "",
+      emoji: "🎯",
+      timeLimit: "",
+    })
+    setIsDialogOpen(false)
+  }
+
+  const handleJoinGroup = () => {
+    // Here you would typically send the code to your backend to join the group
+    console.log("Joining group with code:", joinGroupCode)
+    // Reset form and close dialog
+    setJoinGroupCode("")
+    setIsJoinDialogOpen(false)
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-900 text-white">
       <main className="flex-1 p-6 pb-32 overflow-y-auto">
@@ -73,9 +108,12 @@ export default function GroupsPage() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-full"></div>
             <div className="relative">
-              <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+              <button
+                onClick={() => setIsDialogOpen(true)}
+                className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
+              >
                 <Plus className="w-5 h-5 text-white" />
-              </div>
+              </button>
               <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs font-medium">
                 3
               </div>
@@ -138,10 +176,134 @@ export default function GroupsPage() {
         </div>
 
         {/* Join Group Button */}
-        <Button className="w-full bg-slate-700 hover:bg-slate-600 text-white border-0 py-4 rounded-2xl">
+        <Button
+          onClick={() => setIsJoinDialogOpen(true)}
+          className="w-full bg-slate-700 hover:bg-slate-600 text-white border-0 py-4 rounded-2xl"
+        >
           <Users className="w-5 h-5 mr-2" />
           Join a Group
         </Button>
+
+        {/* Create Group Modal */}
+        {isDialogOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-800 rounded-2xl p-6 w-full max-w-md border border-slate-700">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">Create New Group</h2>
+                <button onClick={() => setIsDialogOpen(false)} className="text-slate-400 hover:text-white">
+                  ✕
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Group Name</label>
+                  <input
+                    value={newGroup.name}
+                    onChange={(e) => setNewGroup({ ...newGroup, name: e.target.value })}
+                    placeholder="Enter group name"
+                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Target Amount ($)</label>
+                  <input
+                    type="number"
+                    value={newGroup.target}
+                    onChange={(e) => setNewGroup({ ...newGroup, target: e.target.value })}
+                    placeholder="Enter target amount"
+                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Emoji</label>
+                  <div className="flex gap-2">
+                    {["🎯", "🍕", "🎵", "🏖️", "🎉", "💰", "🚗", "🏠"].map((emoji) => (
+                      <button
+                        key={emoji}
+                        onClick={() => setNewGroup({ ...newGroup, emoji })}
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${
+                          newGroup.emoji === emoji ? "bg-purple-600" : "bg-slate-700 hover:bg-slate-600"
+                        }`}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Description</label>
+                  <textarea
+                    value={newGroup.description}
+                    onChange={(e) => setNewGroup({ ...newGroup, description: e.target.value })}
+                    placeholder="What's this group for?"
+                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white h-20 resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Time Limit</label>
+                  <input
+                    value={newGroup.timeLimit}
+                    onChange={(e) => setNewGroup({ ...newGroup, timeLimit: e.target.value })}
+                    placeholder="e.g., 2 weeks, 1 month"
+                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+
+                <button
+                  onClick={handleCreateGroup}
+                  disabled={!newGroup.name || !newGroup.target}
+                  className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium"
+                >
+                  Create Group
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Join Group Modal */}
+        {isJoinDialogOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-800 rounded-2xl p-6 w-full max-w-md border border-slate-700">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">Join a Group</h2>
+                <button onClick={() => setIsJoinDialogOpen(false)} className="text-slate-400 hover:text-white">
+                  ✕
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Group Code</label>
+                  <input
+                    value={joinGroupCode}
+                    onChange={(e) => setJoinGroupCode(e.target.value.toUpperCase())}
+                    placeholder="Enter group code (e.g., PIZZA24)"
+                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-center text-lg font-mono tracking-wider"
+                    maxLength={8}
+                  />
+                </div>
+
+                <div className="text-sm text-slate-400 text-center">
+                  Ask your friends for the group code to join their savings goal
+                </div>
+
+                <button
+                  onClick={handleJoinGroup}
+                  disabled={!joinGroupCode || joinGroupCode.length < 4}
+                  className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium"
+                >
+                  Join Group
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       <BottomNavigation />
