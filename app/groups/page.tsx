@@ -103,7 +103,7 @@ export default function GroupsPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-medium">Active Groups</h1>
+            <h1 className="text-3xl font-medium">Active Groups</h1>
           </div>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-full"></div>

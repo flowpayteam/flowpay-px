@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "FlowPay - P2P Payments",
   description: "Send and receive money with friends",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} bg-slate-900 text-white min-h-screen`}>
         <div className="max-w-sm mx-auto min-h-screen bg-slate-900">{children}</div>
       </body>
